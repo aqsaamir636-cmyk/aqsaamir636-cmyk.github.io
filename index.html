@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqsa AI Bot</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #e5ddd5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .chat-container { background: white; width: 350px; height: 500px; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.2); overflow: hidden; }
+        .chat-header { background: #075e54; color: white; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; }
+        #chat-window { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 8px 12px; border-radius: 10px; max-width: 80%; font-size: 14px; }
+        .user-msg { background: #dcf8c6; align-self: flex-end; }
+        .bot-msg { background: #f0f0f0; align-self: flex-start; }
+        .input-area { display: flex; padding: 10px; background: #f0f0f0; }
+        input { flex: 1; padding: 10px; border: none; border-radius: 20px; outline: none; }
+        button { background: #075e54; color: white; border: none; padding: 8px 15px; margin-left: 5px; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">Aqsa's AI Bot 🤖</div>
+    <div id="chat-window">
+        <div class="message bot-msg">Assalam-o-Alaikum! Main live hoon. Main aapki kya madad kar sakti hoon?</div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Yahan likhen..." onkeypress="handleKey(event)">
+        <button onclick="sendMessage()">➤</button>
+    </div>
+</div>
+
+<script>
+    function sendMessage() {
+        let inputField = document.getElementById("user-input");
+        let userText = inputField.value.trim();
+        
+        if (userText !== "") {
+            addMessage(userText, 'user-msg');
+            inputField.value = "";
+            
+            // Bot ka response
+            setTimeout(() => {
+                let botResponse = getBotResponse(userText.toLowerCase());
+                addMessage(botResponse, 'bot-msg');
+            }, 500);
+        }
+    }
+
+    function addMessage(text, className) {
+        let chatWindow = document.getElementById("chat-window");
+        let msgDiv = document.createElement("div");
+        msgDiv.className = "message " + className;
+        msgDiv.innerText = text;
+        chatWindow.appendChild(msgDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight; // Auto scroll to bottom
+    }
+
+    function getBotResponse(input) {
+        if (input.includes("kaise ho") || input.includes("kya haal")) return "Alhamdulillah, main bilkul theek! Aap kaise hain?";
+        if (input.includes("naam")) return "Mera naam Aqsa AI Bot hai.";
+        if (input.includes("hello") || input.includes("hi")) return "Hi there! Main aapki kya madad karun?";
+        if (input.includes("khuda hafiz") || input.includes("bye")) return "Allah Hafiz! Apna khayal rakhiye ga.";
+        
+        return "Dilchasp baat hai! Magar mujhe abhi thora aur seekhna hai.";
+    }
+
+    function handleKey(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    }
+</script>
+
+</body>
+</html>
