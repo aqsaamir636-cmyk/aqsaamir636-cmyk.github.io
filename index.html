@@ -3,34 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aqsa AI Bot</title>
+    <title>Aqsa AI Bot - بہتر ورژن</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #e5ddd5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .chat-container { background: white; width: 350px; height: 500px; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.2); overflow: hidden; }
-        .chat-header { background: #075e54; color: white; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; }
-        #chat-window { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .message { padding: 8px 12px; border-radius: 10px; max-width: 80%; font-size: 14px; }
-        .user-msg { background: #dcf8c6; align-self: flex-end; }
-        .bot-msg { background: #f0f0f0; align-self: flex-start; }
-        .input-area { display: flex; padding: 10px; background: #f0f0f0; }
-        input { flex: 1; padding: 10px; border: none; border-radius: 20px; outline: none; }
-        button { background: #075e54; color: white; border: none; padding: 8px 15px; margin-left: 5px; border-radius: 50%; cursor: pointer; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 10px;
+        }
+        
+        .chat-container { 
+            background: white; 
+            width: 100%;
+            max-width: 400px; 
+            height: 600px; 
+            border-radius: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .chat-header { 
+            background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
+            color: white; 
+            padding: 20px 15px; 
+            text-align: center; 
+            font-size: 20px; 
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        #chat-window { 
+            flex: 1; 
+            padding: 15px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px;
+            background: #f8f8f8;
+        }
+
+        #chat-window::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chat-window::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        #chat-window::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        
+        .message { 
+            padding: 10px 14px; 
+            border-radius: 15px; 
+            max-width: 85%; 
+            font-size: 15px;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-msg { 
+            background: linear-gradient(135deg, #dcf8c6 0%, #c8e6c9 100%);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .bot-msg { 
+            background: white;
+            align-self: flex-start;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-bottom-left-radius: 5px;
+        }
+
+        .bot-msg.greeting {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+        
+        .input-area { 
+            display: flex; 
+            padding: 12px; 
+            background: #f0f0f0;
+            border-top: 1px solid #ddd;
+            gap: 8px;
+        }
+        
+        input { 
+            flex: 1; 
+            padding: 12px 15px; 
+            border: 2px solid #ddd; 
+            border-radius: 25px; 
+            outline: none;
+            font-size: 15px;
+            transition: all 0.3s;
+            direction: rtl;
+        }
+
+        input:focus {
+            border-color: #075e54;
+            box-shadow: 0 0 5px rgba(7, 94, 84, 0.3);
+        }
+        
+        button { 
+            background: linear-gradient(135deg, #075e54 0%, #128c7e 100%);
+            color: white; 
+            border: none; 
+            padding: 12px 15px; 
+            border-radius: 50%; 
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(7, 94, 84, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px 14px;
+            background: white;
+            border-radius: 15px;
+            width: fit-content;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #075e54;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.5; transform: translateY(0); }
+            30% { opacity: 1; transform: translateY(-10px); }
+        }
     </style>
 </head>
 <body>
 
 <div class="chat-container">
-    <div class="chat-header">Aqsa's AI Bot 🤖</div>
+    <div class="chat-header">
+        Aqsa's AI Bot 🤖
+        <div class="header-subtitle">ہمیشہ آپ کی خدمت میں</div>
+    </div>
     <div id="chat-window">
-        <div class="message bot-msg">Assalam-o-Alaikum! Main live hoon. Main aapki kya madad kar sakti hoon?</div>
+        <div class="message bot-msg greeting">السلام علیکم! میں Aqsa AI Bot ہوں۔ میں آپ کی کیا مدد کر سکتی ہوں? 😊</div>
     </div>
     <div class="input-area">
-        <input type="text" id="user-input" placeholder="Yahan likhen..." onkeypress="handleKey(event)">
+        <input type="text" id="user-input" placeholder="یہاں لکھیں..." onkeypress="handleKey(event)">
         <button onclick="sendMessage()">➤</button>
     </div>
 </div>
 
 <script>
+    // صارف کی معلومات
+    let userName = localStorage.getItem('userName') || '';
+
+    function getTimeGreeting() {
+        const hour = new Date().getHours();
+        if (hour >= 5 && hour < 12) return "صبح بخیر! 🌅";
+        if (hour >= 12 && hour < 17) return "دوپہر بخیر! ☀️";
+        if (hour >= 17 && hour < 21) return "شام بخیر! 🌆";
+        return "رات بخیر! 🌙";
+    }
+
     function sendMessage() {
         let inputField = document.getElementById("user-input");
         let userText = inputField.value.trim();
@@ -39,12 +222,30 @@
             addMessage(userText, 'user-msg');
             inputField.value = "";
             
-            // Bot ka response
+            // ٹائپنگ انڈیکیٹر
+            showTypingIndicator();
+            
             setTimeout(() => {
                 let botResponse = getBotResponse(userText.toLowerCase());
+                removeTypingIndicator();
                 addMessage(botResponse, 'bot-msg');
-            }, 500);
+            }, 800);
         }
+    }
+
+    function showTypingIndicator() {
+        let chatWindow = document.getElementById("chat-window");
+        let typingDiv = document.createElement("div");
+        typingDiv.id = "typing-indicator";
+        typingDiv.className = "typing-indicator";
+        typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+        chatWindow.appendChild(typingDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        let typingDiv = document.getElementById("typing-indicator");
+        if (typingDiv) typingDiv.remove();
     }
 
     function addMessage(text, className) {
@@ -53,16 +254,127 @@
         msgDiv.className = "message " + className;
         msgDiv.innerText = text;
         chatWindow.appendChild(msgDiv);
-        chatWindow.scrollTop = chatWindow.scrollHeight; // Auto scroll to bottom
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
     function getBotResponse(input) {
-        if (input.includes("kaise ho") || input.includes("kya haal")) return "Alhamdulillah, main bilkul theek! Aap kaise hain?";
-        if (input.includes("naam")) return "Mera naam Aqsa AI Bot hai.";
-        if (input.includes("hello") || input.includes("hi")) return "Hi there! Main aapki kya madad karun?";
-        if (input.includes("khuda hafiz") || input.includes("bye")) return "Allah Hafiz! Apna khayal rakhiye ga.";
+        // نام کی معلومات حاصل کرنا
+        if (input.includes("میرا نام") || input.includes("mera naam")) {
+            let name = input.split("ہے")[1] || input.split("hai")[1] || "";
+            if (name.trim()) {
+                userName = name.trim();
+                localStorage.setItem('userName', userName);
+                return `خوش آئے مسعود! ${userName} 🎉 آپ کا نام میں نے یاد کر لیا۔`;
+            }
+        }
+
+        // سلام
+        if (input.includes("السلام علیکم") || input.includes("assalam") || input.includes("سلام") || input.includes("slam")) {
+            return `وعلیکم السلام ورحمۃ اللہ وبرکاتہ! ${getTimeGreeting()} ${userName ? userName + ',' : ''}`;
+        }
+
+        // نام پوچھنا
+        if (input.includes("تمہارا نام") || input.includes("nama") || input.includes("naam")) {
+            return "میرا نام Aqsa AI Bot ہے۔ 🤖 میں آپ کے سوالات کا جواب دینے کے لیے یہاں ہوں۔";
+        }
+
+        // صحت پوچھنا
+        if (input.includes("کیسے ہو") || input.includes("kaise ho") || input.includes("تم کیسے ہو") || input.includes("haal")) {
+            return `الحمد للہ! میں بالکل ٹھیک ہوں۔ ${userName ? userName + ', آپ کیسے ہیں?' : 'آپ کیسے ہیں?'} 😊`;
+        }
+
+        // ہیلو/ہائے
+        if (input.includes("hello") || input.includes("hi") || input.includes("ہیلو")) {
+            return `ہیلو! 👋 ${userName ? userName + ',' : ''} خوش آگئے! میں آپ کی کیا مدد کر سکتی ہوں?`;
+        }
+
+        // الوداع
+        if (input.includes("خدا حافظ") || input.includes("khuda hafiz") || input.includes("bye") || input.includes("bye") || input.includes("الوداع")) {
+            return "اللہ حافظ! 👋 آپ کا خیال رکھیں۔ جلد ملتے ہیں! 😊";
+        }
+
+        // وقت
+        if (input.includes("وقت") || input.includes("time") || input.includes("وقت کیا ہے")) {
+            let now = new Date();
+            let time = now.toLocaleTimeString('ur-PK', {hour: '2-digit', minute:'2-digit'});
+            return `موجودہ وقت: ${time} ⏰`;
+        }
+
+        // تاریخ
+        if (input.includes("تاریخ") || input.includes("date") || input.includes("آج کی تاریخ")) {
+            let now = new Date();
+            let date = now.toLocaleDateString('ur-PK');
+            return `آج کی تاریخ: ${date} 📅`;
+        }
+
+        // دعائیں
+        if (input.includes("دعا") || input.includes("prayer") || input.includes("دعاء")) {
+            const duas = [
+                "اے اللہ! مجھے سمجھ اور حکمت عطا کریں۔ آمین! 🤲",
+                "یا اللہ! مجھے راہ دکھا اور رحمت سے نواز۔ آمین! 🤲",
+                "اللہم اغفر لنا ذنوبنا وإسرافنا في أمرنا۔ آمین! 🤲"
+            ];
+            return duas[Math.floor(Math.random() * duas.length)];
+        }
+
+        // احادیث
+        if (input.includes("حدیث") || input.includes("hadith")) {
+            const hadiths = [
+                "حضرت ابوہریرہ رضی اللہ عنہ سے روایت ہے کہ رسول اللہ ﷺ نے فرمایا: بہترین لوگ وہ ہیں جو اپنے اہل و عیال کے ساتھ بہترین ہوں۔ 📖",
+                "علم حاصل کرنا ہر مسلمان مرد اور عورت پر فرض ہے۔ 📖"
+            ];
+            return hadiths[Math.floor(Math.random() * hadiths.length)];
+        }
+
+        // موسم
+        if (input.includes("موسم") || input.includes("weather")) {
+            return "میرے پاس موسم کی معلومات نہیں ہے، لیکن آپ Google سے چیک کر سکتے ہیں! 🌤️";
+        }
+
+        // شکریہ
+        if (input.includes("شکریہ") || input.includes("thanks") || input.includes("shukriya")) {
+            return "آپ کا خیر مقدم! مجھے آپ کی مدد کر کے خوشی ہوئی۔ 😊";
+        }
+
+        // معافی
+        if (input.includes("معافی") || input.includes("sorry") || input.includes("معاف")) {
+            return "کوئی بات نہیں! 😊 ہم سب سے غلطیاں ہو سکتی ہیں۔ کیا میں آپ کی اور مدد کر سکتی ہوں?";
+        }
+
+        // تعریف
+        if (input.includes("تمہیں پسند") || input.includes("خوبصورت") || input.includes("nice") || input.includes("beautiful")) {
+            return `شکریہ! آپ کی تعریف سے میں خوش ہوں۔ 😄 کیا میں مزید مدد کر سکتی ہوں?`;
+        }
+
+        // سوالات
+        if (input.includes("کیا") || input.includes("کیوں") || input.includes("کہاں") || input.includes("کون")) {
+            return "بہت اچھا سوال! 🤔 مجھے اس بارے میں مزید معلومات درکار ہے۔ براہ کرم تفصیل دیں۔";
+        }
+
+        // پاکستان
+        if (input.includes("پاکستان") || input.includes("pakistan")) {
+            return "پاکستان ہمارا پیارا ملک ہے! 🇵🇰 یہاں خوبصورت مقامات اور محنت کش لوگ ہیں۔ آپ کو کون سی بات بتانی ہے?";
+        }
+
+        // اسلام
+        if (input.includes("اسلام") || input.includes("islam")) {
+            return "اسلام امن اور محبت کا مذہب ہے۔ یہ پورے انسانیت کے لیے ہدایت ہے۔ 🕌";
+        }
+
+        // مدد
+        if (input.includes("مدد") || input.includes("help") || input.includes("ہجی")) {
+            return `آپ مجھ سے یہ باتیں پوچھ سکتے ہیں:\n- السلام علیکم\n- میرا نام [نام] ہے\n- وقت/تاریخ\n- دعائیں\n- احادیث\n- اور بہت کچھ! 😊`;
+        }
+
+        // ڈیفالٹ جواب
+        const defaultResponses = [
+            "دلچسپ بات ہے! 🤔 براہ کرم تفصیل سے بتائیں۔",
+            "میں سمجھ رہی ہوں۔ 😊 کیا میں مزید کچھ جان سکتی ہوں?",
+            "بہترین سوال! آپ مزید معلومات دیں تو بہتر ہے۔ 📚",
+            "یہ دلچسپ ہے! 💭 مجھے یہ سیکھنا پسند ہے۔"
+        ];
         
-        return "Dilchasp baat hai! Magar mujhe abhi thora aur seekhna hai.";
+        return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
     }
 
     function handleKey(event) {
@@ -70,6 +382,15 @@
             sendMessage();
         }
     }
+
+    // خوش آمدید پیغام
+    window.addEventListener('load', () => {
+        if (userName) {
+            setTimeout(() => {
+                addMessage(`${getTimeGreeting()} ${userName}! 👋`, 'bot-msg');
+            }, 500);
+        }
+    });
 </script>
 
 </body>
