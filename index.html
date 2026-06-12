@@ -16,8 +16,18 @@
             align-items: center; 
             min-height: 100vh; 
             padding: 10px;
+            flex-wrap: wrap;
         }
         
+        .main-wrapper {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            max-width: 900px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         .chat-container { 
             background: white; 
             width: 100%;
@@ -185,21 +195,129 @@
             0%, 60%, 100% { opacity: 0.5; transform: translateY(0); }
             30% { opacity: 1; transform: translateY(-10px); }
         }
+
+        /* AdSense Styles */
+        .ad-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            padding: 15px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .ad-container-vertical {
+            width: 100%;
+            max-width: 300px;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-banner-top {
+            width: 100%;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .ad-banner-bottom {
+            width: 100%;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .ad-label {
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .main-wrapper {
+                gap: 0;
+            }
+            .ad-container-vertical {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="chat-container">
-    <div class="chat-header">
-        Aqsa's AI Bot 🤖
-        <div class="header-subtitle">ہمیشہ آپ کی خدمت میں</div>
+<div class="main-wrapper">
+    <!-- Left Sidebar Ad -->
+    <div class="ad-container ad-container-vertical" style="display: none;">
+        <div class="ad-label">💡 اشتہار</div>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7245570041904050"
+             data-ad-slot="1234567890"
+             data-ad-format="vertical"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
-    <div id="chat-window">
-        <div class="message bot-msg greeting">السلام علیکم! میں Aqsa AI Bot ہوں۔ میں آپ کی کیا مدد کر سکتی ہوں? 😊</div>
+
+    <!-- Main Chat Container -->
+    <div class="chat-container">
+        <div class="chat-header">
+            Aqsa's AI Bot 🤖
+            <div class="header-subtitle">ہمیشہ آپ کی خدمت میں</div>
+        </div>
+
+        <!-- Top Banner Ad -->
+        <div class="ad-banner-top" style="display: none; padding: 5px;">
+            <div class="ad-label">💡 اشتہار</div>
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:100%;height:auto"
+                 data-ad-client="ca-pub-7245570041904050"
+                 data-ad-slot="9876543210"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div id="chat-window">
+            <div class="message bot-msg greeting">السلام علیکم! میں Aqsa AI Bot ہوں۔ میں آپ کی کیا مدد کر سکتی ہوں? 😊</div>
+        </div>
+
+        <!-- Bottom Banner Ad -->
+        <div class="ad-banner-bottom" style="display: none; padding: 5px;">
+            <div class="ad-label">💡 اشتہار</div>
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:100%;height:auto"
+                 data-ad-client="ca-pub-7245570041904050"
+                 data-ad-slot="5555555555"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="یہاں لکھیں..." onkeypress="handleKey(event)">
+            <button onclick="sendMessage()">➤</button>
+        </div>
     </div>
-    <div class="input-area">
-        <input type="text" id="user-input" placeholder="یہاں لکھیں..." onkeypress="handleKey(event)">
-        <button onclick="sendMessage()">➤</button>
+
+    <!-- Right Sidebar Ad -->
+    <div class="ad-container ad-container-vertical" style="display: none;">
+        <div class="ad-label">💡 اشتہار</div>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7245570041904050"
+             data-ad-slot="2222222222"
+             data-ad-format="vertical"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
 </div>
 
@@ -321,7 +439,7 @@
         // احادیث
         if (input.includes("حدیث") || input.includes("hadith")) {
             const hadiths = [
-                "حضرت ابوہریرہ رضی اللہ عنہ سے روایت ہے کہ رسول اللہ ﷺ نے فرمایا: بہترین لوگ وہ ہیں جو اپنے اہل و عیال کے ساتھ بہترین ہوں۔ 📖",
+                "حضرت ابوہریرہ رضی اللہ عنہ سے روایت ہے کہ رسول اللہ ﷺ نے فرمایا: بہترین لوگ وہ ہیں جو اپنے اہل و عیال کے لیے بہترین ہیں۔",
                 "علم حاصل کرنا ہر مسلمان مرد اور عورت پر فرض ہے۔ 📖"
             ];
             return hadiths[Math.floor(Math.random() * hadiths.length)];
@@ -364,7 +482,7 @@
 
         // مدد
         if (input.includes("مدد") || input.includes("help") || input.includes("ہجی")) {
-            return `آپ مجھ سے یہ باتیں پوچھ سکتے ہیں:\n- السلام علیکم\n- میرا نام [نام] ہے\n- وقت/تاریخ\n- دعائیں\n- احادیث\n- اور بہت کچھ! 😊`;
+            return `آپ مجھ سے یہ باتیں پوچھ سکتے ہیں:\n- السلام علیکم\n- میرا نام [نام] ہے\n- وقت/تاریخ\n- دعائیں\n- احادیث\n- اور بہت کچھ!`;
         }
 
         // ڈیفالٹ جواب
