@@ -30,8 +30,13 @@
             flex-direction: column; 
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             overflow: hidden;
-            animation: slideIn 0.5s ease-out;
+              animation: slideIn 0.5s ease-out;
+  pointer-events: auto;
+  z-index: 10;
         }
+         
+     
+
 
         @keyframes slideIn {
             from { transform: translateY(20px); opacity: 0; }
