@@ -123,63 +123,50 @@
     }
 
     async function sendMessage() {
-        const inputField = document.getElementById('user-input');
-        const messageText = inputField.value.trim();
-        if (!messageText) return;
+    const inputField = document.getElementById("user-input");
+    const chatBox = document.getElementById("chat-box");
+    const messageText = inputField.value.trim();
 
-        appendMessage(messageText, 'user-message');
-        inputField.value = '';
+    if (messageText === "") return;
 
-        const chatBox = document.getElementById('chat-box');
-        const loadingDiv = document.createElement('div');
-        loadingDiv.className = "message bot-message";
-        loadingDiv.innerText = "Soch raha hoon...";
-        chatBox.appendChild(loadingDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
+    // صارف کا میسج دکھائیں
+    chatBox.innerHTML += `<div class="message user-message">${messageText}</div>`;
+    inputField.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-        try {
-            const response = await fetch('https://openai.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: 'gpt-3.5-turbo',
-                    messages: [{ role: 'user', content: messageText }]
-                })
-            });
+    // بوٹ کا لوڈنگ میسج
+    const botMessageId = "bot-" + Date.now();
+    chatBox.innerHTML += `<div class="message bot-message" id="${botMessageId}">...</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-            const data = await response.json();
-            chatBox.removeChild(loadingDiv);
+    try {
+        // جیمنائی (Gemini) کا نیا لائیو سسٹم
+        const response = await fetch(`https://googleapis.com{GEMINI_API_KEY}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: messageText }] }]
+            })
+        });
 
-            // Sahi response data format lagaya gya hai
-            if (data.choices && data.choices[0] && data.choices[0].message) {
-                appendMessage(data.choices[0].message.content, 'bot-message');
-            } else {
-                appendMessage('Maafi chahta hoon, kuch galti hui hai.', 'bot-message');
-            }
+        const data = await response.json();
+        const botResponse = data.candidates[0].content.parts[0].text;
 
-        } catch (error) {
-            if (chatBox.contains(loadingDiv)) {
-                chatBox.removeChild(loadingDiv);
-            }
-            appendMessage('Net ka masla hai ya key block ho gayi hai.', 'bot-message');
-        }
+        // بوٹ کا اصلی جواب اسکرین پر دکھائیں
+        document.getElementById(botMessageId).innerText = botResponse;
+
+    } catch (error) {
+        document.getElementById(botMessageId).innerText = "Net ka masla hai ya key block ho gayi hai.";
+        console.error(error);
+    }
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+ 
+        
+            
     }
 
-    function appendMessage(text, className) {
-        const chatBox = document.getElementById('chat-box');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${className}`;
-        messageDiv.innerText = text;
-        chatBox.appendChild(messageDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-</script>
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7245570041904050"
-     crossorigin="anonymous"></script>
+    
 </body>
     "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"
 </html>
